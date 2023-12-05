@@ -30,8 +30,9 @@ public class TodoController {
     }
 
     @PostMapping("/add")
-    public void saveEntity(@RequestBody Todo todo) {
+    public Todo saveEntity(@RequestBody Todo todo) {
         todoService.add(todo);
+        return todo;
     }
 
     @PostMapping("/add/multiple")
@@ -41,12 +42,12 @@ public class TodoController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteEntityById(@PathVariable Long id) {
         todoService.deleteById(id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public void deleteAllEntities() {
         todoService.deleteAll();
     }
