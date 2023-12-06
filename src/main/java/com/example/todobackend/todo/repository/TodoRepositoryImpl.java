@@ -56,7 +56,7 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
-    public void update(Long id, Todo updatedTodo) {
+    public Todo update(Long id, Todo updatedTodo) {
         Todo existingTodo = todoMap.get(id);
 
         if (existingTodo != null) {
@@ -66,5 +66,6 @@ public class TodoRepositoryImpl implements TodoRepository {
         } else {
             throw new NotFoundException("Todo with id " + id + " not found");
         }
+        return existingTodo;
     }
 }

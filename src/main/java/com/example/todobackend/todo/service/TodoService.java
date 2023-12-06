@@ -38,7 +38,7 @@ public class TodoService {
         todoRepository.deleteAll();
     }
 
-    public void updateTodo(Long id, Todo updatedTodo) {
-        todoRepository.update(id, updatedTodo);
+    public Todo updateTodo(Long id, Todo updatedTodo) {
+      return todoRepository.update(id, updatedTodo);
     }
 }
