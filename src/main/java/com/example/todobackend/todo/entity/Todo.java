@@ -1,10 +1,15 @@
 package com.example.todobackend.todo.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 
+@Entity
+@Table
 @Data
 public class Todo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String newTodo;
     private LocalDate dueDate;

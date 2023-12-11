@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/todo")
@@ -25,20 +26,20 @@ public class TodoController {
     }
 
     @GetMapping("/{id}")
-    public Todo getEntityById(@PathVariable Long id) {
+    public Optional<Todo> getEntityById(@PathVariable Long id) {
         return todoService.findById(id);
     }
 
     @PostMapping("/add")
     public Todo saveEntity(@RequestBody Todo todo) {
-        todoService.add(todo);
+        todoService.save(todo);
         return todo;
     }
 
     @PostMapping("/add/multiple")
     public void saveEntities(@RequestBody List<Todo> todos) {
         for (Todo todo : todos) {
-            todoService.add(todo);
+            todoService.save(todo);
         }
     }
 
