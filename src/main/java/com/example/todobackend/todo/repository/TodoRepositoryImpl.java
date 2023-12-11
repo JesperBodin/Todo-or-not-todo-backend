@@ -60,8 +60,8 @@ public class TodoRepositoryImpl implements TodoRepository {
         Todo existingTodo = todoMap.get(id);
 
         if (existingTodo != null) {
-            existingTodo.setText(updatedTodo.getText());
-            existingTodo.setDeadLine(updatedTodo.getDeadLine());
+            existingTodo.setNewTodo(updatedTodo.getNewTodo());
+            existingTodo.setDueDate(updatedTodo.getDueDate());
             existingTodo.setDone(updatedTodo.isDone());
         } else {
             throw new NotFoundException("Todo with id " + id + " not found");

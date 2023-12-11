@@ -6,23 +6,23 @@ import java.time.LocalDate;
 @Data
 public class Todo {
     private Long id;
-    private String text;
-    private LocalDate deadLine;
+    private String newTodo;
+    private LocalDate dueDate;
     private boolean done;
 
     public Todo() {
     }
 
-    public Todo(String text, LocalDate deadLine, boolean done) {
-        this.text = text;
-        this.deadLine = deadLine;
+    public Todo(String newTodo, LocalDate dueDate, boolean done) {
+        this.newTodo = newTodo;
+        this.dueDate = dueDate;
         this.done = done;
     }
 
-    public Todo(Long id, String text, LocalDate deadLine, boolean done) {
+    public Todo(Long id, String newTodo, LocalDate dueDate, boolean done) {
         this.id = id;
-        this.text = text;
-        this.deadLine = deadLine;
+        this.newTodo = newTodo;
+        this.dueDate = dueDate;
         this.done = done;
     }
 
@@ -30,8 +30,8 @@ public class Todo {
     public String toString() {
         return "Todo{" +
                 "id=" + id +
-                ", text='" + text + '\'' +
-                ", deadLine=" + deadLine +
+                ", newTodo='" + newTodo + '\'' +
+                ", dueDate=" + dueDate +
                 '}';
     }
 }
