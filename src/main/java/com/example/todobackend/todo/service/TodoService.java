@@ -2,6 +2,7 @@ package com.example.todobackend.todo.service;
 
 import com.example.todobackend.todo.entity.Todo;
 import com.example.todobackend.todo.exception.NotFoundException;
+import com.example.todobackend.todo.exception.UnprocessableEntityException;
 import com.example.todobackend.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,19 +26,34 @@ public class TodoService {
     }
 
     public Optional<Todo> findById(Long id) {
-        return todoRepository.findById(id);
+        return Optional.ofNullable(todoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Todo with id " + id + " not found")));
     }
 
     public Todo save(Todo todo) {
-        return todoRepository.save(todo);
+        if (!todo.getNewTodo().isBlank()) {
+            return todoRepository.save(todo);
+        } else {
+            throw new UnprocessableEntityException("Text field must not be empty! ");
+        }
     }
 
     public void deleteById(Long id) {
-        todoRepository.deleteById(id);
+        todoRepository.findById(id)
+                .ifPresentOrElse(
+                        todo -> todoRepository.deleteById(id),
+                        () -> {
+                            throw new NotFoundException("Failed to delete, no todo with id " + id + " found");
+                        }
+                );
     }
 
     public void deleteAll() {
-        todoRepository.deleteAll();
+        if(todoRepository.count() > 0) {
+            todoRepository.deleteAll();
+        } else {
+            throw new NotFoundException("You have no todos to delete!");
+        }
     }
 
     public Todo updateTodo(Long id, Todo updatedTodo) {
