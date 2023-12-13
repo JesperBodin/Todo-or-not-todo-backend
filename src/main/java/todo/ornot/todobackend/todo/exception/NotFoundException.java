@@ -1,4 +1,4 @@
-package com.example.todobackend.todo.exception;
+package todo.ornot.todobackend.todo.exception;
 
 public class NotFoundException extends RuntimeException{
 

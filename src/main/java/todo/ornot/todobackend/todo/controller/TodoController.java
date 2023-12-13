@@ -1,7 +1,7 @@
-package com.example.todobackend.todo.controller;
+package todo.ornot.todobackend.todo.controller;
 
-import com.example.todobackend.todo.service.TodoService;
-import com.example.todobackend.todo.entity.Todo;
+import todo.ornot.todobackend.todo.service.TodoService;
+import todo.ornot.todobackend.todo.entity.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

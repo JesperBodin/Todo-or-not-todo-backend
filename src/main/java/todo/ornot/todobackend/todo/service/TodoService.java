@@ -1,9 +1,9 @@
-package com.example.todobackend.todo.service;
+package todo.ornot.todobackend.todo.service;
 
-import com.example.todobackend.todo.entity.Todo;
-import com.example.todobackend.todo.exception.NotFoundException;
-import com.example.todobackend.todo.exception.UnprocessableEntityException;
-import com.example.todobackend.todo.repository.TodoRepository;
+import todo.ornot.todobackend.todo.entity.Todo;
+import todo.ornot.todobackend.todo.exception.NotFoundException;
+import todo.ornot.todobackend.todo.exception.UnprocessableEntityException;
+import todo.ornot.todobackend.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
