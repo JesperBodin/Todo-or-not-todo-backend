@@ -1,4 +1,4 @@
-package com.example.todobackend;
+package todo.ornot.todobackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.example.todobackend;
+package todo.ornot.todobackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
