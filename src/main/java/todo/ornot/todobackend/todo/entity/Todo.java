@@ -2,6 +2,8 @@ package todo.ornot.todobackend.todo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import todo.ornot.todobackend.todo.dto.TodoDTO;
+
 import java.time.LocalDate;
 
 @Entity
@@ -14,6 +16,10 @@ public class Todo {
     private String newTodo;
     private LocalDate dueDate;
     private boolean done;
+
+    public TodoDTO todoDTO() {
+        return new TodoDTO(this.id, this.newTodo, this.dueDate, this.done);
+    }
 
     public Todo() {
     }

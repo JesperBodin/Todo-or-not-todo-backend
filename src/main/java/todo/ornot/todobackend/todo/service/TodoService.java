@@ -2,11 +2,11 @@ package todo.ornot.todobackend.todo.service;
 
 import todo.ornot.todobackend.todo.entity.Todo;
 import todo.ornot.todobackend.todo.exception.NotFoundException;
-import todo.ornot.todobackend.todo.exception.UnprocessableEntityException;
 import todo.ornot.todobackend.todo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,17 +25,15 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<Todo> findById(Long id) {
-        return Optional.ofNullable(todoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Todo with id " + id + " not found")));
+
+    public Optional<Todo> findById(Long id){
+        return todoRepository.findById(id);
     }
 
-    public Todo save(Todo todo) {
-        if (!todo.getNewTodo().isBlank()) {
+
+    public Todo save(String newTodo, LocalDate dueDate, boolean done) {
+            Todo todo = new Todo(newTodo, dueDate, done);
             return todoRepository.save(todo);
-        } else {
-            throw new UnprocessableEntityException("Text field must not be empty! ");
-        }
     }
 
     public void deleteById(Long id) {
@@ -56,15 +54,15 @@ public class TodoService {
         }
     }
 
-    public Todo updateTodo(Long id, Todo updatedTodo) {
+    public Todo updateTodo(Long id, String newTodo, LocalDate dueDate, Boolean done) {
         Optional<Todo> existingTodoOptional = todoRepository.findById(id);
 
         if (existingTodoOptional.isPresent()) {
             Todo existingTodo = existingTodoOptional.get();
 
-            existingTodo.setNewTodo(updatedTodo.getNewTodo());
-            existingTodo.setDueDate(updatedTodo.getDueDate());
-            existingTodo.setDone(updatedTodo.isDone());
+            existingTodo.setNewTodo(newTodo);
+            existingTodo.setDueDate(dueDate);
+            existingTodo.setDone(done);
 
             return todoRepository.save(existingTodo);
         } else {

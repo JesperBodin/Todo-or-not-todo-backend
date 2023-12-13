@@ -1,16 +1,21 @@
 package todo.ornot.todobackend.todo.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+import todo.ornot.todobackend.todo.dto.TodoDTO;
+import todo.ornot.todobackend.todo.exception.NotFoundException;
 import todo.ornot.todobackend.todo.service.TodoService;
 import todo.ornot.todobackend.todo.entity.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/todo")
 @CrossOrigin("http://localhost:5173/")
+@Validated
 public class TodoController {
 
     private final TodoService todoService;
@@ -21,26 +26,24 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<Todo> getAllEntities() {
-        return todoService.findAll();
+    public List<TodoDTO> getAllEntities() {
+        List<Todo> todos = todoService.findAll();
+        return todos.stream()
+                .map(Todo::todoDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Optional<Todo> getEntityById(@PathVariable Long id) {
-        return todoService.findById(id);
+    public TodoDTO getEntityById(@PathVariable Long id) {
+        Todo todo = todoService.findById(id)
+                .orElseThrow(() -> new NotFoundException("Todo with id " + id + " not found"));
+        return todo.todoDTO();
     }
 
     @PostMapping("/add")
-    public Todo saveEntity(@RequestBody Todo todo) {
-        todoService.save(todo);
-        return todo;
-    }
-
-    @PostMapping("/add/multiple")
-    public void saveEntities(@RequestBody List<Todo> todos) {
-        for (Todo todo : todos) {
-            todoService.save(todo);
-        }
+    public TodoDTO saveEntity(@RequestBody @Valid TodoDTO todoDTO) {
+        Todo savedTodo = todoService.save(todoDTO.getNewTodo(), todoDTO.getDueDate(), todoDTO.getDone());
+        return savedTodo.todoDTO();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -54,9 +57,10 @@ public class TodoController {
     }
 
     @PutMapping("/update/{id}")
-    public Todo updateTodo(
+    public TodoDTO updateTodo(
             @PathVariable Long id,
-            @RequestBody Todo todo) {
-        return todoService.updateTodo(id, todo);
+            @RequestBody TodoDTO todoDTO) {
+        Todo updatedTodo = todoService.updateTodo(id, todoDTO.getNewTodo(), todoDTO.getDueDate(), todoDTO.getDone());
+        return updatedTodo.todoDTO();
     }
 }
