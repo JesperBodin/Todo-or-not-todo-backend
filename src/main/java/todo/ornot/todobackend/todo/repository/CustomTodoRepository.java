@@ -2,9 +2,12 @@ package todo.ornot.todobackend.todo.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import todo.ornot.todobackend.todo.entity.Todo;
 import todo.ornot.todobackend.todo.exception.NotFoundException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -31,16 +34,18 @@ public class CustomTodoRepository {
     }
 
     public Todo save(String new_todo, LocalDate due_date, boolean done) {
-        String sql = "INSERT INTO todo (new_todo, due_date, done) VALUES (?, ?, ?)";
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("todo")
+                .usingGeneratedKeyColumns("id");
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, new_todo);
-            ps.setTimestamp(2, Timestamp.valueOf(due_date.atStartOfDay()));
-            ps.setBoolean(3, done);
-            return ps;
-        });
-        return new Todo(new_todo, due_date, done);
+        SqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("new_todo", new_todo)
+                .addValue("due_date", due_date)
+                .addValue("done", done);
+
+        Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+
+        return new Todo(id, new_todo, due_date, done);
     }
 
     public void deleteById(Long id) {
@@ -61,8 +66,14 @@ public class CustomTodoRepository {
 
     public Todo updateTodo(Long id, String newTodo, LocalDate dueDate, Boolean done) {
         String sql = "UPDATE todo SET new_todo = ?, due_date = ?, done = ? WHERE id = ?";
-        System.out.println("SQL Query in updateTodo: " + sql);
-        int updatedRows = jdbcTemplate.update(sql, newTodo, Timestamp.valueOf(dueDate.atStartOfDay()), done, id);
+
+        int updatedRows;
+
+        if (dueDate != null) {
+            updatedRows = jdbcTemplate.update(sql, newTodo, Timestamp.valueOf(dueDate.atStartOfDay()), done, id);
+        } else {
+            updatedRows = jdbcTemplate.update(sql, newTodo, null, done, id);
+        }
 
         if (updatedRows == 0) {
             throw new NotFoundException("Todo with id " + id + " not found");
