@@ -3,7 +3,6 @@ package todo.ornot.todobackend.user.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import todo.ornot.todobackend.user.entity.Role;
 
 import java.util.ArrayList;
 import java.util.List;
