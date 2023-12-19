@@ -82,11 +82,17 @@ public class CustomTodoRepository {
     }
 
     private Todo mapRowToTodo(ResultSet resultSet, int rowNum) throws SQLException {
-        return new Todo(
-                resultSet.getLong("id"),
-                resultSet.getString("new_todo"),
-                resultSet.getDate("due_date").toLocalDate(),
-                resultSet.getBoolean("done")
-        );
+        long id = resultSet.getLong("id");
+        String newTodo = resultSet.getString("new_todo");
+
+        LocalDate dueDate = null;
+        Date date = resultSet.getDate("due_date");
+        if (date != null) {
+            dueDate = date.toLocalDate();
+        }
+
+        boolean done = resultSet.getBoolean("done");
+
+        return new Todo(id, newTodo, dueDate, done);
     }
 }
