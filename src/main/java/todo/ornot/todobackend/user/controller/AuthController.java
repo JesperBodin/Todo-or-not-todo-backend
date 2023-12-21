@@ -9,10 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import todo.ornot.todobackend.user.dto.AuthResponseDto;
 import todo.ornot.todobackend.user.dto.LoginDto;
 import todo.ornot.todobackend.user.dto.RegisterDto;
@@ -75,6 +72,16 @@ public class AuthController {
         userRepository.save(user);
 
         return new ResponseEntity<>("User registerd success!", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<String> removeById(@PathVariable Long id){
+        if (!userRepository.existsById(id)) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        userRepository.deleteUserRolesByUserId(id);
+        userRepository.deleteById(id);
+        return new ResponseEntity<>("User with id + ${id} + deleted", HttpStatus.OK);
     }
 
 }
