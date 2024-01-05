@@ -3,6 +3,7 @@ package todo.ornot.todobackend.todo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import todo.ornot.todobackend.todo.dto.TodoDTO;
+import todo.ornot.todobackend.user.entity.UserEntity;
 
 import java.time.LocalDate;
 
@@ -17,6 +18,14 @@ public class Todo {
     private LocalDate dueDate;
     private boolean done;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    public Todo(Long userId, String newTodo, LocalDate dueDate, boolean done, UserEntity user) {
+    }
+
+
     public TodoDTO todoDTO() {
         return new TodoDTO(this.id, this.newTodo, this.dueDate, this.done);
     }
@@ -24,10 +33,11 @@ public class Todo {
     public Todo() {
     }
 
-    public Todo(String newTodo, LocalDate dueDate, boolean done) {
+    public Todo(String newTodo, LocalDate dueDate, boolean done, UserEntity user) {
         this.newTodo = newTodo;
         this.dueDate = dueDate;
         this.done = done;
+        this.user = user;
     }
 
     public Todo(Long id, String newTodo, LocalDate dueDate, boolean done) {
