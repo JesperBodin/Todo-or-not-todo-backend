@@ -2,6 +2,7 @@ package todo.ornot.todobackend.todo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import todo.ornot.todobackend.todo.entity.Todo;
 import todo.ornot.todobackend.todo.exception.NotFoundException;
 import todo.ornot.todobackend.todo.repository.TodoRepository;
@@ -49,6 +50,7 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
+    @Transactional
     public void deleteAllByUserId(Long userId) {
         todoRepository.deleteByUserId(userId);
     }
